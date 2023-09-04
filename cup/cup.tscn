@@ -1,0 +1,74 @@
+[gd_scene load_steps=8 format=3 uid="uid://cq1qr7wb18vkp"]
+
+[ext_resource type="Script" path="res://cup/cup.gd" id="1_dni60"]
+[ext_resource type="Texture2D" uid="uid://dlhyhjhrftc68" path="res://assets/env/elementWood004.png" id="1_lmk2x"]
+[ext_resource type="Texture2D" uid="uid://jjcth2ikg0vg" path="res://assets/env/elementWood015.png" id="2_32mq1"]
+[ext_resource type="AudioStream" uid="uid://drjssrw34f7ag" path="res://assets/audio/vanish.wav" id="4_qbu0p"]
+
+[sub_resource type="Animation" id="Animation_0gnge"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprites:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.5, 0.5)]
+}
+
+[sub_resource type="Animation" id="Animation_a682n"]
+resource_name = "vanish"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprites:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(1, 1), Vector2(2.08165e-12, 2.08165e-12)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_k0jpu"]
+_data = {
+"RESET": SubResource("Animation_0gnge"),
+"vanish": SubResource("Animation_a682n")
+}
+
+[node name="Cup" type="StaticBody2D" groups=["cup"]]
+script = ExtResource("1_dni60")
+
+[node name="Sprites" type="Node2D" parent="."]
+scale = Vector2(0.5, 0.5)
+
+[node name="Sprite2D" type="Sprite2D" parent="Sprites"]
+position = Vector2(-72, -66)
+texture = ExtResource("1_lmk2x")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Sprites"]
+texture = ExtResource("2_32mq1")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Sprites"]
+position = Vector2(72, -66)
+texture = ExtResource("1_lmk2x")
+flip_h = true
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-53, -50, -55, 17, 55, 17, 53, -52, 19, -17, -19, -17)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_k0jpu")
+}
+
+[node name="VanishSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_qbu0p")
+
+[connection signal="finished" from="VanishSound" to="." method="_on_vanish_sound_finished"]

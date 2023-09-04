@@ -1,0 +1,50 @@
+[gd_scene load_steps=9 format=3 uid="uid://57i2ij31tvhk"]
+
+[ext_resource type="Script" path="res://animal/animal.gd" id="1_7t1yt"]
+[ext_resource type="Texture2D" uid="uid://dy4id1edmu4ef" path="res://assets/player/parrot.png" id="1_a6fks"]
+[ext_resource type="AudioStream" uid="uid://brwweilj4sm14" path="res://assets/audio/stretch2.ogg" id="3_mf48i"]
+[ext_resource type="AudioStream" uid="uid://ddi5o5napdoco" path="res://assets/audio/catapult.ogg" id="4_yvfi8"]
+[ext_resource type="AudioStream" uid="uid://b063ccu8op3de" path="res://assets/audio/kick_wood.ogg" id="5_vxixl"]
+[ext_resource type="Texture2D" uid="uid://ddfbunhrjw1rd" path="res://assets/items/arrow.png" id="6_jj7yc"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4v81j"]
+bounce = 0.2
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3mgrj"]
+radius = 19.0263
+
+[node name="Animal" type="RigidBody2D" groups=["animal"]]
+input_pickable = true
+physics_material_override = SubResource("PhysicsMaterial_4v81j")
+max_contacts_reported = 1
+contact_monitor = true
+freeze = true
+script = ExtResource("1_7t1yt")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("1_a6fks")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_3mgrj")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(-0.5, 4.76837e-07)
+scale = Vector2(2.05, 2.1)
+
+[node name="StretchSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_mf48i")
+
+[node name="LaunchSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_yvfi8")
+
+[node name="CollisionSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_vxixl")
+
+[node name="ArrowSprite" type="Sprite2D" parent="."]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("6_jj7yc")
+offset = Vector2(150, 2.08165e-12)
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on__screen_exited"]
